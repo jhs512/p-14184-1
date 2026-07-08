@@ -1,18 +1,17 @@
 package com.back.domain.post.postComment.dto;
 
 import com.back.domain.post.postComment.entity.PostComment;
-import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
 public record PostCommentDto(
-        @NotNull int id,
-        @NotNull LocalDateTime createDate,
-        @NotNull LocalDateTime modifyDate,
-        @NotNull int authorId,
-        @NotNull String authorName,
-        @NotNull int postId,
-        @NotNull String content
+        int id,
+        LocalDateTime createDate,
+        LocalDateTime modifyDate,
+        int authorId,
+        String authorName,
+        int postId,
+        String content
 ) {
     public PostCommentDto(PostComment postComment) {
         this(

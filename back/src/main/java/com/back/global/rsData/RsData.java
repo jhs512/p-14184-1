@@ -1,13 +1,12 @@
 package com.back.global.rsData;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import jakarta.validation.constraints.NotNull;
 
 public record RsData<T>(
-        @NotNull String resultCode,
+        String resultCode,
         @JsonIgnore int statusCode,
-        @NotNull String msg,
-        @NotNull T data
+        String msg,
+        T data
 ) {
     public RsData(String resultCode, String msg) {
         this(resultCode, msg, null);
