@@ -13,7 +13,6 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
@@ -73,9 +72,9 @@ public class ApiV1MemberController {
     }
 
     public record MemberLoginResBody(
-            @NotNull MemberDto item,
-            @NotNull String apiKey,
-            @NotNull String accessToken
+            MemberDto item,
+            String apiKey,
+            String accessToken
     ) {
     }
 
@@ -127,9 +126,7 @@ public class ApiV1MemberController {
     @Transactional(readOnly = true)
     @Operation(summary = "내 정보")
     public MemberWithUsernameDto me() {
-        Member actor = memberService
-                .findById(rq.getActor().getId())
-                .get();
+        Member actor = rq.getActorFromDb();
 
         return new MemberWithUsernameDto(actor);
     }
