@@ -16,6 +16,11 @@ const eslintConfig = defineConfig([
     "src/hooks/**", // 추후 샤드CN에 의해서 자동으로 만들어지는 파일들이 저장될 경로
     "src/lib/backend/*/schema.d.ts", // openapi-typescript에 의해서 자동으로 만들어지는 파일들이 저장되는 경로
   ]),
+  {
+    rules: {
+      "@next/next/no-img-element": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;
