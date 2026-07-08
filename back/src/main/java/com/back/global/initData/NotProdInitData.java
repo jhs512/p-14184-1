@@ -4,26 +4,29 @@ import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.service.MemberService;
 import com.back.domain.post.post.entity.Post;
 import com.back.domain.post.post.service.PostService;
-import com.back.global.app.AppConfig;
+import com.back.global.app.CustomConfigProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Profile;
 import org.springframework.transaction.annotation.Transactional;
 
+@Profile("!prod")
 @Configuration
 @RequiredArgsConstructor
-public class BaseInitData {
+public class NotProdInitData {
     @Autowired
     @Lazy
-    private BaseInitData self;
+    private NotProdInitData self;
     private final PostService postService;
     private final MemberService memberService;
+    private final CustomConfigProperties customConfigProperties;
 
     @Bean
-    ApplicationRunner baseInitDataApplicationRunner() {
+    ApplicationRunner notProdInitDataApplicationRunner() {
         return args -> {
             self.work1();
             self.work2();
@@ -36,23 +39,23 @@ public class BaseInitData {
 
         Member memberSystem = memberService.join("system", "1234", "시스템");
         memberSystem.modifyApiKey(memberSystem.getUsername());
-        if (AppConfig.isNotProd()) memberSystem.modifyApiKey(memberSystem.getUsername());
 
         Member memberAdmin = memberService.join("admin", "1234", "관리자");
         memberAdmin.modifyApiKey(memberAdmin.getUsername());
-        if (AppConfig.isNotProd()) memberAdmin.modifyApiKey(memberAdmin.getUsername());
 
         Member memberUser1 = memberService.join("user1", "1234", "유저1");
         memberUser1.modifyApiKey(memberUser1.getUsername());
-        if (AppConfig.isNotProd()) memberUser1.modifyApiKey(memberUser1.getUsername());
 
         Member memberUser2 = memberService.join("user2", "1234", "유저2");
         memberUser2.modifyApiKey(memberUser2.getUsername());
-        if (AppConfig.isNotProd()) memberUser2.modifyApiKey(memberUser2.getUsername());
 
         Member memberUser3 = memberService.join("user3", "1234", "유저3");
         memberUser3.modifyApiKey(memberUser3.getUsername());
-        if (AppConfig.isNotProd()) memberUser3.modifyApiKey(memberUser3.getUsername());
+
+        customConfigProperties.getNotProdMembers().forEach(notProdMember -> {
+            Member socialMember = memberService.join(notProdMember.username(), null, notProdMember.nickname(), notProdMember.profileImgUrl());
+            socialMember.modifyApiKey(notProdMember.apiKey());
+        });
     }
 
     @Transactional
