@@ -40,6 +40,14 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 nickname = (String) attributesProperties.get("nickname");
                 profileImgUrl = (String) attributesProperties.get("profile_image");
             }
+            case "NAVER" -> {
+                Map<String, Object> attributes = oAuth2User.getAttributes();
+                Map<String, Object> attributesProperties = (Map<String, Object>) attributes.get("response");
+
+                oauthUserId = (String) attributesProperties.get("id");
+                nickname = (String) attributesProperties.get("nickname");
+                profileImgUrl = (String) attributesProperties.get("profile_image");
+            }
             case "GOOGLE" -> {
                 Map<String, Object> attributes = oAuth2User.getAttributes();
 
