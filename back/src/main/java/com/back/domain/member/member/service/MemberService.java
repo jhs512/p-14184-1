@@ -3,6 +3,7 @@ package com.back.domain.member.member.service;
 import com.back.domain.member.member.entity.Member;
 import com.back.domain.member.member.repository.MemberRepository;
 import com.back.global.exception.ServiceException;
+import com.back.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -24,14 +25,18 @@ public class MemberService {
     }
 
     public Member join(String username, String password, String nickname) {
+        return join(username, password, nickname, null);
+    }
+
+    public Member join(String username, String password, String nickname, String profileImgUrl) {
         findByUsername(username)
                 .ifPresent(_ -> {
                     throw new ServiceException("409-1", "이미 존재하는 아이디입니다.");
                 });
 
-        password = passwordEncoder.encode(password);
+        password = (password != null && !password.isBlank()) ? passwordEncoder.encode(password) : null;
 
-        Member member = new Member(username, password, nickname);
+        Member member = new Member(username, password, nickname, profileImgUrl);
 
         return memberRepository.save(member);
     }
@@ -63,5 +68,22 @@ public class MemberService {
 
     public List<Member> findAll() {
         return memberRepository.findAll();
+    }
+
+    public RsData<Member> modifyOrJoin(String username, String password, String nickname, String profileImgUrl) {
+        Member member = findByUsername(username).orElse(null);
+
+        if (member == null) {
+            member = join(username, password, nickname, profileImgUrl);
+            return new RsData<>("201-1", "회원가입이 완료되었습니다.", member);
+        }
+
+        modify(member, nickname, profileImgUrl);
+
+        return new RsData<>("200-1", "회원 정보가 수정되었습니다.", member);
+    }
+
+    private void modify(Member member, String nickname, String profileImgUrl) {
+        member.modify(nickname, profileImgUrl);
     }
 }
