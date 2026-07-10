@@ -56,6 +56,13 @@ public class Member extends BaseEntity {
         this.profileImgUrl = profileImgUrl;
     }
 
+    public String getProfileImgUrlOrDefault() {
+        if (profileImgUrl == null)
+            return "https://placehold.co/600x600?text=U_U";
+
+        return profileImgUrl;
+    }
+
     public boolean isAdmin() {
         if ("system".equals(username)) return true;
         if ("admin".equals(username)) return true;

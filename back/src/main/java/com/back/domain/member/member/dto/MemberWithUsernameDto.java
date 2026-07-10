@@ -11,7 +11,8 @@ public record MemberWithUsernameDto(
         @NotNull LocalDateTime modifyDate,
         @NotNull String name,
         @NotNull String username,
-        @NotNull boolean isAdmin
+        @NotNull boolean isAdmin,
+        @NotNull String profileImageUrl
 ) {
     public MemberWithUsernameDto(Member member) {
         this(
@@ -20,7 +21,8 @@ public record MemberWithUsernameDto(
                 member.getModifyDate(),
                 member.getName(),
                 member.getUsername(),
-                member.isAdmin()
+                member.isAdmin(),
+                member.getProfileImgUrlOrDefault()
         );
     }
 }
