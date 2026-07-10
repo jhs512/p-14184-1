@@ -10,7 +10,8 @@ public record MemberDto(
         @NotNull LocalDateTime createDate,
         @NotNull LocalDateTime modifyDate,
         @NotNull String name,
-        @NotNull boolean isAdmin
+        @NotNull boolean isAdmin,
+        @NotNull String profileImgUrl
 ) {
     public MemberDto(Member member) {
         this(
@@ -18,7 +19,8 @@ public record MemberDto(
                 member.getCreateDate(),
                 member.getModifyDate(),
                 member.getName(),
-                member.isAdmin()
+                member.isAdmin(),
+                member.getProfileImgUrlOrDefault()
         );
     }
 }
